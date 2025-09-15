@@ -1,168 +1,54 @@
-![banner](./imagenes/banner.jpg)
-# Sui Starter Kit Backend
+# Proyecto: GreenPoints - Registro de huella ecologica en Sui
 
-Sui es una plataforma de blockchain y contratos inteligentes de capa 1 diseñada para que la propiedad de activos digitales sea rápida, privada, segura y accesible.
+Documentacion del backend de move que registra actividades ecologicas, acumula puntos y asigna un rango/nivel con titulo y frase motivadora para incentivar al usuario
+El registro de Huella ecologica es un proyecto deasrrollado en Move sobre la blockchain de Sui, cuyo objetivo pricipal es promover acciones sostenibles mediante un sistema de puntos llamado GreenPoints, este consiste en dar cierta candidad de puntos dependiendo de alguna actividad ecologica realizada, a su vez con estos puntps obtienen un nivel/rango, un titulo y una frase motivadora (dependiendo de la cantidad de puntos obtenidos).
 
-Move es un lenguaje de código abierto para escribir paquetes seguros para manipular objetos en blockchain. Permite bibliotecas, herramientas y comunidades de desarrolladores comunes en blockchains con modelos de datos y ejecución muy diferentes.
+## Actividades
 
-## Proyecto base
+--------------------------------------------
+| ID | Actividad                  | Puntos |
+|----|----------------------------|--------|
+| 1  | Plantar arbol              | 60     |
+| 2  | Reciclar                   | 40     |
+| 3  | Usar bicicleta             | 30     |
+| 4  | Ahorrar agua               | 10     |
+| 5  | Reducir electricidad       | 20     |
+| 6  | Voluntariado ambiental     | 70     |
+| 7  | Limpiar espacios publicos  | 50     |
+--------------------------------------------
 
-Puedes usar este repositorio como tu punto de partida para el desarrollo de tu proyecto backend.
+## Rangos, titulos y frases
 
-### Abriendo con Codespaces
+-------------------------------------------------------------------------------------------------------------------------
+| Rango      | Puntos        | Titulo                  | Frase motivadora                                               |
+|------------|---------------|-------------------------|----------------------------------------------------------------|
+| Cobre      | 0 – 99        | Semillita Exploradora   | comienza tu camino hacia la sostenibilidad ambiental           |
+| Plata      | 100 – 299     | Hoja Renovadora         | cada granito importa! contribuye mas al bienestar del planeta  |
+| Oro        | 300 – 599     | Raiz Protectora         | tus esfuerzos fortalecen la vida de la naturaleza              |
+| Platino    | 600 – 999     | Guardabosques           | Continua defendiendo los ecosistemas y su equilibrio           |
+| Diamante   | 1000 – 1299   | Guardian de la Tierra   | tus acciones inican el cambio, el ecosistema te necesita       |
+| Zafiro     | 1300 – 1699   | Protector de Rios       | promueves la salud y pureza del agua en el mundo, no te rindas |
+| Legendario | 1700+         | Heroe Verde             | eres la inspiracion y liderazgo que el planeta necesita        |
+-------------------------------------------------------------------------------------------------------------------------
 
-* Asegúrate de clonar este repositorio a tu cuenta usando el botón **`Fork`**.
-    
-    ![fork](./imagenes/fork.png)
-    * Puedes renombrar el repositorio a lo que sea que se ajuste con tu proyecto.
-* Presiona el botón **`<> Code`** y luego haz click en la sección **`Codespaces`**
+## Funciones principales
 
-    ![codespaces](./imagenes/codespaces.png)
+- `create_catalog(ctx)` → Crea el catalogo con actividades ecologicas predefinidas
+- `create_board(ctx)` → Crea el leaderboard inicial vacio  
+- `create_profile(user, ctx)` → Crea un perfil nuevo con 0 puntos y rango "Cobre"
+- `do_activity(profile, catalog, board, activity_id)` → Registra actividad y actualiza puntos
+- `get_profile(profile)` → Devuelve (puntos, rango, titulo, frase motivadora)
+- `list_activities(catalog)` → Lista todas las actividades disponibles
+- `get_score(board, address)` → Consulta puntos de usuario en el leaderboard
 
-* Por último, presiona **`Create codespace on master`**. Esto abrirá el proyecto en una interfaz gráfica de Visual Studio Code e instalará todas las herramientas necesarias para desarrollar con Move.
+## Compilar y publicar
 
-### Contenido
+```bash
+# complilar el paquete
+sui move build
 
-Este proyecto instala las siguientes herramientas:
-* [SuiUp](https://github.com/Mystenlabs/suiup/) (Administrador de versiones).
-* [Sui CLI](https://docs.sui.io/references/cli/client) (Instalada usando SuiUp).
-* Extensión de VS Code [Move](https://marketplace.visualstudio.com/items?itemName=mysten.move).
-* Extensión de VS Code [Move Formatter](https://marketplace.visualstudio.com/items?itemName=mysten.prettier-move).
+# publicar en testnet
+sui client publish --gas-budget 30000000
 
-Todas las herramientas fueron desarrolladas por [MystenLabs](https://www.mystenlabs.com/).
-
-## Ejecutando el proyecto
-
-Ingresa a tu terminal y ejecuta el siguiente comando:
-
-```sh
-sui move test
-```
-
-Deberías de obtener el siguiente resultado:
-```sh
-INCLUDING DEPENDENCY Bridge
-INCLUDING DEPENDENCY SuiSystem
-INCLUDING DEPENDENCY Sui
-INCLUDING DEPENDENCY MoveStdlib
-BUILDING Intro
-Running Move unit tests
-[debug] "Hello, World!"
-[ PASS    ] introduccion::practica_sui::prueba
-Test result: OK. Total tests: 1; passed: 1; failed: 0
-```
-
-¡Felicidades! :partying_face: Acabas de ejecutar de manera exitosa tu primer módulo Move. Ahora, analicemos que está pasando.
-
-En la carpeta `sources` podemos encontrar un archivo llamado `starter.move`. Este archivo, como lo indica la extensión, contiene el código de Move que estamos ejecutando. En este caso, es un **módulo** con una **función** y un **test**.
-
-## Estructura de un módulo
-
-La estructura de un **módulo** es la siguiente:
-
-```rust
-module direccion::nombre_modulo {
-    // ...  resto del código
-}
-```
-
-1. Declaración del módulo con la palabra clave `module`.
-2. Dirección en la que se desplegará el módulo.
-    La dirección la encontramos en el archivo de configuraciones `Move.toml`, en el apartado de `addresses`. En nuestro caso:
-    ```toml
-    [addresses]
-    starter = "0x0"
-    ```
-3. Nombre del módulo, en nuestro caso: `practica_sui`
-
-Por lo que nuestro código luce así:
-```rust
-module introduccion::practica_sui {
-    // ...  resto del código
-}
-```
-
-Después, vienen los `imports` o los módulos/librerías que estamos importando para que el nuestro funcione. En nuestro código, estamos importando dos funciones de la librería principal de **Move**:
-
-```rust
-    use std::debug::print;
-    use std::string::utf8;
-```
-
-Se importa la función para imprimir en consola, así como una función para convertir cadenas de texto a un formato aceptado por la función anterior.
-
-La siguiente sección de código incluye nuestra primera función:
-
-```rust
-    fun practica() {
-        print(&utf8(b"Hello, World!"));
-    }
-```
-
-En ella, hacemos uso de ambas librerías importadas. La función simplemente imprime la cadena `Hello, World!` en la consola.
-
-Y por último, necesitamos una forma de ejecutar esta función. Por ahora lo estamos haciendo a través de un **bloque de pruebas** o `test`:
-
-```rust
-    #[test]
-    fun prueba() {
-        practica();
-    }
-```
-
-Al nosotros haber ejecutado `sui move test` le estamos diciendo a la CLI que ejecute todas las funciones que tengan un bloque `[#test]`, en este caso, ejecuta nuestra función `prueba`, la cual a su vez llama a la función `practica`.
-
-## Output
-
-Por último, analicemos el resultado que se imprimió en la consola.
-
-```sh
-INCLUDING DEPENDENCY Bridge
-INCLUDING DEPENDENCY SuiSystem
-INCLUDING DEPENDENCY Sui
-INCLUDING DEPENDENCY MoveStdlib
-BUILDING Intro
-Running Move unit tests
-[debug] "Hello, World!"
-[ PASS    ] introduccion::practica_sui::prueba
-Test result: OK. Total tests: 1; passed: 1; failed: 0
-```
-
-El primer bloque de texto nos indica que está incluyendo las dependencias necesarias para ejecutar el proyecto:
-
-```sh
-INCLUDING DEPENDENCY Bridge
-INCLUDING DEPENDENCY SuiSystem
-INCLUDING DEPENDENCY Sui
-INCLUDING DEPENDENCY MoveStdlib
-BUILDING Intro
-```
-
-Estas dependencias son las dependencias básicas que todo paquete en **Move** necesita, así que el compilador las importa de manera automática.
-Puedes comprobar que no estamos importando ninguna dependencia en el archivo `Move.toml` en el apartado `[dependencies]`.
-
-La siguiente línea en el output nos indica que se ejecutaran las pruebas unitarias en el archivo, recuerda que esto es porque corrimos el comando `sui move test`:
-```
-Running Move unit tests
-```
-
-Después, obtenemos el mensaje que ejecuta la función prueba, en nuestro caso, la línea de texto `Hello, World!`:
-```sh
-[debug] "Hello, World!"
-```
-
-Ahora, en la siguiente línea, podemos obtener información de exactamente que funciones se ejecutaron:
-```sh
-[ PASS    ] starter::practica_sui::prueba
-```
-La estructura es algo así:
-```rust
-direccion::nombre_modulo::funcion
-```
-Con esto, podemos comprobar que la función que se ejecutó fue `prueba`.
-
-Por último, obtenemos información sobre las pruebas unitarias, cómo cuantas se ejecutaron y cuantas se pasaron:
-
-```sh
-Test result: OK. Total tests: 1; passed: 1; failed: 0
-```
+# publicar en mainnet
+sui client publish --gas-budget 30000000 --network mainnet

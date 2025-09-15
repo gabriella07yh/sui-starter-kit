@@ -1,7 +1,8 @@
 [package]
-name = "Intro"
-version = "0.0.1"
+name = "green_points"
 edition = "2024.beta"
+version = "0.1.0"
+authors = ["Gabriela Yañez Hdz"]
 
 [addresses]
 starter = "0x0"
