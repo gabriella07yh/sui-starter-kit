@@ -52,3 +52,10 @@ sui client publish --gas-budget 30000000
 
 # publicar en mainnet
 sui client publish --gas-budget 30000000 --network mainnet
+
+
+## Contrato Desplegado
+- Network: Sui Mainnet
+- Package ID: 0x36d8ad276df6fdd9d43966337bfd0492266e6f1b8b2d596c89e75357de10093a
+- Transaction: 8v9VU2ipz9qtxVe9W8RYtZrJhbrL7UN6vcosqnT5GgU5
+- Explorer: https://suiscan.xyz/mainnet/tx/8v9VU2ipz9qtxVe9W8RYtZrJhbrL7UN6vcosqnT5GgU5
